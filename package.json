@@ -39,10 +39,9 @@
   "activationEvents": [
     "onLanguage:c",
     "onLanguage:cpp",
-    "onLanguage:objective-c",
-    "onLanguage:objective-cpp",
     "workspaceContains:.ccls",
-    "workspaceContains:compile_commands.json"
+    "workspaceContains:compile_commands.json",
+    "workspaceContains:.vscode/CMakeServerCache.json"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -158,6 +157,11 @@
         "title": "Reload Index",
         "category": "ccls",
         "command": "ccls.reload"
+      },
+      {
+        "title": "Reload Configuration",
+        "category": "ccls",
+        "command": "ccls/reloadConfiguration"
       },
       {
         "title": "Restart language server",
@@ -776,10 +780,55 @@
           "default": [],
           "description": "An set of command line arguments to strip before passing to clang when indexing. Each list entry is a separate argument."
         },
+        "ccls.clang.excludeArgsIsWhitelist": {
+          "type": "bool",
+          "default": false,
+          "description": "Invert logic of excludeArgs. An set of allowed command line arguments to pass to clang"
+        },
         "ccls.clang.pathMappings": {
           "type": "array",
           "default": [],
           "description": "Translate paths in compile_commands.json entries, .ccls options and cache files. This allows to reuse cache files built otherwhere if the source paths are different."
+        },
+        "ccls.cmakeServerConfig.cmakePath": {
+          "type": "string",
+          "default": "cmake",
+          "description": "Path to cmake executable. (either local or remote)"
+        },
+        "ccls.cmakeServerConfig.runCmakeLocal": {
+          "type": "boolean",
+          "default": true,
+          "description": "True: Run cmake on local machine, False: Call cmake over ssh"
+        },
+        "ccls.cmakeServerConfig.cmakeBuildDir": {
+          "type": "string",
+          "default": "",
+          "description": "Directory with the build files. (either local or remote)"
+        },
+        "ccls.cmakeServerConfig.sshUser": {
+          "type": "string",
+          "default": "",
+          "description": "User used for ssh."
+        },
+        "ccls.cmakeServerConfig.sshServer": {
+          "type": "string",
+          "default": "",
+          "description": "Address of remote machine for ssh."
+        },
+        "ccls.cmakeServerConfig.sshDir": {
+          "type": "string",
+          "default": "",
+          "description": "Directory with keys for ssh login"
+        },
+        "ccls.cmakeServerConfig.preCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Command to run bevor calling cmake. (either local or remote)"
+        },
+        "ccls.cmakeServerConfig.cmakeArguments": {
+          "type": "string",
+          "default": "",
+          "description": "Additional cmake arguments."
         },
         "ccls.index.whitelist": {
           "type": "array",

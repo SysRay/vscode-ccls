@@ -237,6 +237,7 @@ export class ServerContext implements Disposable {
     this._dispose.push(commands.registerCommand("ccls._applyFixIt", this.fixItCmd, this));
     this._dispose.push(commands.registerCommand('ccls._autoImplement', this.autoImplementCmd, this));
     this._dispose.push(commands.registerCommand('ccls._insertInclude', this.insertIncludeCmd, this));
+    this._dispose.push(commands.registerCommand('ccls/reloadConfiguration', () => this.client.sendNotification("workspace/didChangeConfiguration")));
 
     const config = workspace.getConfiguration('ccls');
     if (config.get('misc.showInactiveRegions')) {
@@ -269,6 +270,16 @@ export class ServerContext implements Disposable {
     this._dispose.push(commands.registerCommand(
         "ccls.hackGotoForTreeView", this.hackGotoForTreeView, this
     ));
+
+    // Notify configuration changed
+    this.client.onNotification('$ccls/publishConfigurationChanged', () => window
+    .showInformationMessage('Configuration changed.', ...['update', 'cancel'])
+    .then(selection => {
+      if(selection == 'update'){
+        this.client.sendNotification("workspace/didChangeConfiguration");
+      }
+    })
+    );
 
     // Semantic highlighting
     const semantic = new SemanticContext();
