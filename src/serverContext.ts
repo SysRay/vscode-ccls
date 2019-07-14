@@ -34,7 +34,7 @@ import { CallHierarchyProvider } from "./hierarchies/callHierarchy";
 import { InheritanceHierarchyProvider } from "./hierarchies/inheritanceHierarchy";
 import { MemberHierarchyProvider } from "./hierarchies/memberHierarchy";
 import { InactiveRegionsProvider } from "./inactiveRegions";
-import { PublishSemanticHighlightArgs, SemanticContext, semanticTypes, PublishShowDocumentArgs } from "./semantic";
+import { PublishSemanticHighlightArgs, SemanticContext, semanticTypes } from "./semantic";
 import { StatusBarIconProvider } from "./statusBarIcon";
 import { ClientConfig, IHierarchyNode } from './types';
 import { disposeAll, normalizeUri, unwrap, wait } from "./utils";
@@ -228,7 +228,8 @@ export class ServerContext implements Disposable {
     this._dispose.push(commands.registerCommand(
       "ccls.base", this.makeRefHandler("$ccls/inheritance", { derived: false }, true)));
     this._dispose.push(commands.registerCommand("ccls.showXrefs", this.showXrefsHandlerCmd, this));
-    this._dispose.push(commands.registerCommand("ccls.toggleSourceHeader", this.makeNavigateHandler('$ccls/toggleSourceHeader')));
+    this._dispose.push(commands.registerCommand(
+      "ccls.toggleSourceHeader", this.makeNavigateHandler('$ccls/toggleSourceHeader')));
     // The language client does not correctly deserialize arguments, so we have a
     // wrapper command that does it for us.
     this._dispose.push(commands.registerCommand('ccls.showReferences', this.showReferencesCmd, this));
@@ -237,7 +238,8 @@ export class ServerContext implements Disposable {
     this._dispose.push(commands.registerCommand("ccls._applyFixIt", this.fixItCmd, this));
     this._dispose.push(commands.registerCommand('ccls._autoImplement', this.autoImplementCmd, this));
     this._dispose.push(commands.registerCommand('ccls._insertInclude', this.insertIncludeCmd, this));
-    this._dispose.push(commands.registerCommand('ccls/reloadConfiguration', () => this.client.sendNotification("workspace/didChangeConfiguration")));
+    this._dispose.push(commands.registerCommand(
+      'ccls/reloadConfiguration', () => this.client.sendNotification("workspace/didChangeConfiguration")));
 
     const config = workspace.getConfiguration('ccls');
     if (config.get('misc.showInactiveRegions')) {
@@ -272,13 +274,13 @@ export class ServerContext implements Disposable {
     ));
 
     // Notify configuration changed
-    this.client.onNotification('$ccls/publishConfigurationChanged', () => window
-    .showInformationMessage('Configuration changed.', ...['update', 'cancel'])
-    .then(selection => {
-      if(selection == 'update'){
-        this.client.sendNotification("workspace/didChangeConfiguration");
-      }
-    })
+    this.client.onNotification('$ccls/publishConfigurationChanged', () =>
+      window.showInformationMessage('Configuration changed.', ...['update', 'cancel'])
+      .then ((selection) => {
+        if (selection === 'update') {
+          this.client.sendNotification("workspace/didChangeConfiguration");
+        }
+      })
     );
 
     // Semantic highlighting
