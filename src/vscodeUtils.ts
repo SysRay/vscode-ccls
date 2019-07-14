@@ -16,13 +16,15 @@ export async function jumpToUriAtPosition(
     console.log("!editor");
     return;
   }
-  if (!d) {
+  if (!d && position.character != 0 && position.line != 0) {
     editor.revealRange(new Range(position, position), TextEditorRevealType.InCenter);
     editor.selection = new Selection(position, position);
   } else {
     const e = await window.showTextDocument(d, undefined, preserveFocus);
-    e.revealRange(
-        new Range(position, position), TextEditorRevealType.InCenter);
-    e.selection = new Selection(position, position);
+    if(position.character != 0 && position.line != 0){
+      e.revealRange(
+          new Range(position, position), TextEditorRevealType.InCenter);
+      e.selection = new Selection(position, position);
+    }
   }
 }

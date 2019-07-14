@@ -43,6 +43,10 @@ export interface PublishSemanticHighlightArgs {
   readonly symbols: SemanticSymbol[];
 }
 
+export interface PublishShowDocumentArgs {
+  readonly uri: string;
+}
+
 function makeSemanticDecorationType(
   color: string|undefined, underline: boolean, italic: boolean,
   bold: boolean): TextEditorDecorationType {

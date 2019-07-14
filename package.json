@@ -67,6 +67,11 @@
     "menus": {
       "editor/context": [
         {
+          "command": "ccls.toggleSourceHeader",
+          "when": "resourceLangId == cpp",
+          "group": "navigation@1"
+        },
+        {
           "command": "ccls.inheritanceHierarchy",
           "when": "resourceLangId == cpp",
           "group": "navigation@1.31"
@@ -157,6 +162,11 @@
         "title": "Reload Index",
         "category": "ccls",
         "command": "ccls.reload"
+      },
+      {
+        "title": "Toggle Header/Source",
+        "category": "ccls",
+        "command": "ccls.toggleSourceHeader"
       },
       {
         "title": "Reload Configuration",
@@ -1057,6 +1067,12 @@
           "description": "When set, logs all LSP messages to specified WebSocket endpoint."
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "ccls.toggleSourceHeader",
+        "key": "Alt+o"
+      }
+    ]
   }
 }
