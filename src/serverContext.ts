@@ -283,6 +283,11 @@ export class ServerContext implements Disposable {
       })
     );
 
+    // Notification Messages
+    this.client.onNotification('$ccls/notification', (message) => {
+      window.showInformationMessage(message.path);
+    });
+
     // Semantic highlighting
     const semantic = new SemanticContext();
     this._dispose.push(semantic);
